@@ -1,0 +1,36 @@
+The board can be broken down into 18 lines.
+9 top to bottom (y axis) and 9 left to right (x axis).
+A sudoku position is valid if the number contained in the
+position is the only instance of this number on both it's 
+x and y axis. 
+
+This solver will work on the assumption that every starting 
+position is valid and then due to the mathematics behind the
+game every calculated position is therefore also valid.
+
+The grid of 9x9 is split up into 9 tiles each containing 9
+positions.
+
+Those 9 positions can be classed as 1 of 2 types
+    1. Valid positions : these positions as stated above
+    have already been filled in with a valid number
+    2. Possible positions : these positions are blank and
+    can be filled by any number not already in the tile
+
+To find/remove invalid possible positions an initial search
+can be preformed on every position. If the search finds a
+blank position nothing needs to be done, but if the search
+finds a cell that has been filled in then we know for the
+number found in the cell there are no possible other positions
+on the same x/y axis or the title it is contained in and as
+such the possible position matrix can be updated.
+
+A possible position can be replaced with a valid position 
+when for a given number there is only 1 possible position in
+a tile and when the possible position is updated to a valid
+position then we can remove any instances of the same numer
+in the possible position matrix on the x and y axis. Note:
+we do not need to remove and instances in the tile's possible
+positions matrix as for the possible position to be converted
+to a valid position there can only be one instance of a the
+number in the possible position matrix.
