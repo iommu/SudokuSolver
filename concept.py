@@ -15,6 +15,16 @@ puzzle =    [[0,0,0,0,0,0,0,0,7],
              [6,0,0,0,9,0,0,8,1],
              [1,0,0,0,0,0,0,0,0]]
 
+puzzle = [[1,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0],
+[0,0,0,0,0,0,0,0,0]]
+
 # 511 is decimal rep of 111111111 where each "1" represents a possible position for 9-->1
 valid = np.uint16([
         [511,511,511,511,511,511,511,511,511],
@@ -28,16 +38,30 @@ valid = np.uint16([
         [511,511,511,511,511,511,511,511,511]
 ])
 
+# this is an initial uint that will be used for bitwise and of the row and column
+bitAND = np.uint16(0)
+
 # step 2 : crross off initial possible positions
 for i in range(0,9):
     for j in range(0,9):
         if puzzle[i][j]:
             valid[i][j]=0
-        print(valid[i][j])
+            bitAND = 2**(puzzle[i][j]-1) # calculate 2^(currentPosition-1), stored as uint16 i.e. 4 --> 2^(4-1) = 8 = ...0001000
+            bitAND = ~bitAND # invert bitAND to create mask
+            for k in range(0,9):
+                valid[i][k] = valid[i][k]&bitAND # generate valid on x axis
+                valid[k][j] = valid[k][j]&bitAND # generate valid on y axis
+
+# debugger
+for i in range(0,9):
+    for j in range(0,9):
+        print(format(valid[i][j],'09b')+" ",end="")
+    print()
+            
 
 # step 3 :  Cyclicly fill in calculated positions for numbers 1-->9 until all positions solved
 
 solved = 1 # If no new solutions are found in a loop then the solver is stuck and should quit instead of repeating
 if solved:
     for i in range(1,10):
-        print(i)
+        print(i)    
