@@ -15,16 +15,6 @@ puzzle =    [[0,0,0,0,0,0,0,0,7],
              [6,0,0,0,9,0,0,8,1],
              [1,0,0,0,0,0,0,0,0]]
 
-puzzle = [[1,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0],
-[0,0,0,0,0,0,0,0,0]]
-
 # 511 is decimal rep of 111111111 where each "1" represents a possible position for 9-->1
 valid = np.uint16([
         [511,511,511,511,511,511,511,511,511],
@@ -73,5 +63,13 @@ for i in range(0,9):
 
 solved = 1 # If no new solutions are found in a loop then the solver is stuck and should quit instead of repeating
 if solved:
-    for i in range(1,10):
-        print(i)    
+    for tileX in range(0,3):
+        for tileY in range(0,3):
+            exclusive = [0,0,0,0,0,0,0,0,0]
+            for positionX in range(0,3):
+                for positionY in range(0,3):
+                    for value in range(0,9):
+                        exclusive[value] += valid[tileX*3+positionX][tileY*3+positionY]>>(8-value)&0b1
+            print(exclusive)
+
+                    
