@@ -62,14 +62,41 @@ for i in range(0,9):
 # step 3 :  Cyclicly fill in calculated positions for numbers 1-->9 until all positions solved
 
 solved = 1 # If no new solutions are found in a loop then the solver is stuck and should quit instead of repeating
-if solved:
+while solved:
+    solved=0
     for tileX in range(0,3):
         for tileY in range(0,3):
             exclusive = [0,0,0,0,0,0,0,0,0]
             for positionX in range(0,3):
                 for positionY in range(0,3):
                     for value in range(0,9):
-                        exclusive[value] += valid[tileX*3+positionX][tileY*3+positionY]>>(8-value)&0b1
+                        exclusive[8-value] += valid[tileX*3+positionX][tileY*3+positionY]>>(8-value)&0b1
             print(exclusive)
+            for value in range(0,9):
+                if exclusive[value]==1:
+                    print("solving"+str(value))
+                    solved+=1
+                    print("solved = "+str(solved))
+                    for positionX in range(0,3):
+                        for positionY in range(0,3):
+                            if valid[tileX*3+positionX][tileY*3+positionY]>>value&0b1:
+                                puzzle[tileX*3+positionX][tileY*3+positionY]=value+1
+                                valid[tileX*3+positionX][tileY*3+positionY]=0
+                                bitAND = 2**value
+                                bitAND = ~bitAND
+                                wipeCartesian(tileX*3+positionX,tileY*3+positionY)
+    print(solved)
 
-                    
+print()
+print()
+for i in range(0,9):
+    for j in range(0,9):
+        print(format(valid[i][j],'09b')+" ",end="")
+    print()
+
+print()
+print()
+for i in range(0,9):
+    for j in range(0,9):
+        print(format(puzzle[i][j])+" ",end="")
+    print()
