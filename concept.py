@@ -41,6 +41,17 @@ valid = np.uint16([
 # this is an initial uint that will be used for bitwise and of the row and column
 bitAND = np.uint16(0)
 
+def wipeCartesian(x,y):
+    for i in range(0,9):
+            valid[x][i] = valid[x][i]&bitAND # generate valid on x axis
+            valid[i][y] = valid[i][y]&bitAND # generate valid on y axis
+
+def wipeTile(x,y):
+    xOffset = x % 3
+    yOffset = y % 3
+    for i in range(x-xOffset,x-xOffset+3):
+        for j in range(y-yOffset,y-yOffset+3):
+            valid[i][j]=valid[i][j]&bitAND
 # step 2 : crross off initial possible positions
 for i in range(0,9):
     for j in range(0,9):
@@ -48,9 +59,8 @@ for i in range(0,9):
             valid[i][j]=0
             bitAND = 2**(puzzle[i][j]-1) # calculate 2^(currentPosition-1), stored as uint16 i.e. 4 --> 2^(4-1) = 8 = ...0001000
             bitAND = ~bitAND # invert bitAND to create mask
-            for k in range(0,9):
-                valid[i][k] = valid[i][k]&bitAND # generate valid on x axis
-                valid[k][j] = valid[k][j]&bitAND # generate valid on y axis
+            wipeCartesian(i,j)
+            wipeTile(i,j)
 
 # debugger
 for i in range(0,9):
