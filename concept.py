@@ -28,6 +28,11 @@ valid = np.uint16([
         [511,511,511,511,511,511,511,511,511]
 ])
 
+for i in range(0,9):
+    for j in range(0,9):
+        print(format(puzzle[i][j])+" ",end="")
+    print()
+
 # this is an initial uint that will be used for bitwise and of the row and column
 bitAND = np.uint16(0)
 
@@ -51,14 +56,7 @@ for i in range(0,9):
             bitAND = ~bitAND # invert bitAND to create mask
             wipeCartesian(i,j)
             wipeTile(i,j)
-
-# debugger
-for i in range(0,9):
-    for j in range(0,9):
-        print(format(valid[i][j],'09b')+" ",end="")
-    print()
             
-
 # step 3 :  Cyclicly fill in calculated positions for numbers 1-->9 until all positions solved
 
 solved = 1 # If no new solutions are found in a loop then the solver is stuck and should quit instead of repeating
@@ -71,12 +69,9 @@ while solved:
                 for positionY in range(0,3):
                     for value in range(0,9):
                         exclusive[8-value] += valid[tileX*3+positionX][tileY*3+positionY]>>(8-value)&0b1
-            print(exclusive)
             for value in range(0,9):
                 if exclusive[value]==1:
-                    print("solving"+str(value))
                     solved+=1
-                    print("solved = "+str(solved))
                     for positionX in range(0,3):
                         for positionY in range(0,3):
                             if valid[tileX*3+positionX][tileY*3+positionY]>>value&0b1:
@@ -85,14 +80,6 @@ while solved:
                                 bitAND = 2**value
                                 bitAND = ~bitAND
                                 wipeCartesian(tileX*3+positionX,tileY*3+positionY)
-    print(solved)
-
-print()
-print()
-for i in range(0,9):
-    for j in range(0,9):
-        print(format(valid[i][j],'09b')+" ",end="")
-    print()
 
 print()
 print()
